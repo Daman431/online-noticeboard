@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="css/index_styling.css">
+  <title>Home</title>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class='navbar-brand' href="#first">Logo</a>
+      </div>
+      <ul class="nav navbar-nav navbar-expand">
+        <li class='active'><a href="#home" class="btn btn-secondary bg-dark ml-2">Home</a></li>
+        <li><a href="#sign_in" class="btn btn-secondary bg-dark ml-2">Sign in</a></li>
+        <li><a href="#second" class="btn btn-secondary bg-dark ml-2">Third</a></li>
+        <li><a href="#second" class="btn btn-secondary bg-dark ml-2" data-toggle="modal" data-target="#login">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="modal fade" id="login" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modal-dialog-centered" >
+      <div class="modal-content">
+        <div class="modal-header">
+          <img class="modal-title custom-profile-photo mx-auto" src="media/profile-photo.png"></img>
+        </div>
+        <div class="modal-body">
+          <form action="login" method="POST">
+            <div class="form-group">
+              <label for="username">Username:</label><br>
+              <input class="form-control" type="text" class='expand' name="username">
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label><br>
+              <input class="form-control" type="password" name="password">
+            </div>  
+        </div>
+        <div class="modal-footer">
+          <input type="submit" class="btn btn-success" value="Login">
+          <input type="button" class="btn btn-danger" data-dismiss="modal" value="Close">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content-view" id="home">
+    <div>
+      <p>This is a notice!</p>
+      <p>This is a notice!</p>
+      <p>This is a notice!</p>
+      <p>This is a notice!</p>
+      <p>This is a notice!</p>
+    </div>
+  </div>
+  <div class="content-view" id="sign_in">
+    <form action="sign_in" method="POST">
+      <label for="Username">Username:</label>
+      <br>
+      <input type="text" name="username">
+      <br>
+      <label for="Password">password:</label>
+      <br>
+      <input type="password" name="password">
+      <br>
+      <label for="Admin">
+        <input type="radio" name="userType" value="Admin">
+        Admin
+      </label>
+      <br>
+      <label for="Students">
+        <input type="radio" name="userType" onclick="" value="Student">
+        Student
+      </label>
+      <br>
+      <input type="submit" value="Sign In">
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+:root{
+    scroll-behavior: smooth;
+}
+.custom-profile-photo{
+    border-radius: 100px;
+    height: 20vh;
+    width: 10vw;
+}
+.content-view{
+    height: 100vh;
+    padding-top: 10vh;
+    padding-left: 1vw;
+    background-color: aquamarine;
+}
+body{
+    margin: 0;
+    padding: 0;
+}
+nav{
+    height: 10vh;
+}
