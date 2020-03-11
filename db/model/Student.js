@@ -7,11 +7,11 @@ const Student = mongoose.model('students',{
     password:{
         type:String
     },
-    roll:{
+    roll_no:{
         type:String
     },
     message:{
-        type:String
+        type:Array
     }
 })
 

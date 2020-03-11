@@ -1,10 +1,59 @@
 <html>
     <head>
         <title>Admin</title>
+        <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
-        <div>
+        <div class="container-fluid jumbotron">
             <p>Admin page</p>
         </div>
+
+        <div class="container-fluid">
+            <button data-toggle="modal" data-target="#studentList">Add message</button>
+        </div>
+
+        {{!-- Student List Modal --}}
+        <div id='studentList' class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Select Students</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="studentList" id="studentListContainer" style="display: flex; flex-direction:column;">
+                            
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#messageBox" onclick="hideStudentList()">Next</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{!-- Message Modal --}}
+        <div class="modal fade" id="messageBox" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Message</h2>
+                    </div>
+                    <div class="modal-body">
+                        <textarea name="message" cols="60" rows="5" id="messageContainer" placeholder="Type your message here... "></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" onclick="sendMessage()">Send</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
+    <script src="js/admin_response.js"></script>
 </html>

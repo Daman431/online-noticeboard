@@ -34,7 +34,7 @@ app.post('/login',(req,res)=>{
 
 
 app.post("/sign_in",(req,res)=>{
-
+    console.log(req.body)
     if(req.body.userType == 'Student'){
         const newStudent = new Student(req.body)
         newStudent.save().then(()=>{
@@ -48,9 +48,34 @@ app.post("/sign_in",(req,res)=>{
         });
     }
 })
+app.post('/message',(req,res)=>{
+    console.log(req.body)
+    for(i=0;i<req.body.studentList.length;i++){
+        console.log(i)
+        Student.findOneAndUpdate({username:req.body.studentList[i]},{$push:{message:req.body.message}},(error,result)=>{
+            if(error){
+                return console.log(error);
+            }
+            console.log(result)
+        })
+    }
+    res.send('Updated!');
+})
 
 app.get('/admin',(req,res)=>{
     res.render('admin');
+})
+app.get('/student',(req,res)=>{
+    res.render('student');
+})
+app.get('/student_details',(req,res)=>{
+    var studentList = Student.find({},(error,result)=>{
+        if(error){
+            console.log("error!");
+            return res.send("Error in the database!");
+        }
+        res.send(result);
+    });
 })
 app.listen('3000',()=>{
     console.log('App is running on port:3000')
