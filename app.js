@@ -7,6 +7,7 @@ const mongodb = require('mongodb');
 require('./db/mongoose');
 const Student = require('./db/model/Student');
 const Admin = require('./db/model/Admin');
+const Public = require('./db/model/Public');
 var info = null;
 
 
@@ -21,6 +22,9 @@ app.use(bodyParser.json());
 
 //Login Request
 app.post('/login',(req,res)=>{
+
+
+    //Student Table Check
     Student.findOne({username:req.body.username},(error,result)=>{
         if(error){
             return res.send('Database Error!');
@@ -29,6 +33,20 @@ app.post('/login',(req,res)=>{
             if(result.password == req.body.password){
                 info = result;
                 return res.redirect('student');
+            }
+        }
+    });
+
+
+    //Admin Table check
+    Admin.findOne({username:req.body.username},(error,result)=>{
+        if(error){
+            return res.send('Database Error!');
+        }
+        else if(result){
+            if(result.password == req.body.password){
+                info = result;
+                return res.redirect('admin');
             }
         }
         res.send('Wrong username or Password');
@@ -66,6 +84,9 @@ app.post('/message',(req,res)=>{
     res.send('Updated!');
 })
 
+//POST public message
+
+
 //GET Requests
 app.get('/index',(req,res)=>{
     res.render("index");
@@ -102,6 +123,14 @@ app.get('/studentRecord',(req,res)=>{
             return res.send("Error in the database!");
         }
     res.send(result);
+    })
+})
+app.get('/publicMessage',(req,res)=>{
+    Public.find({},(error,result)=>{
+        if(error){
+            return res.send("Database Error!");
+        }
+        res.send(result);
     })
 })
 

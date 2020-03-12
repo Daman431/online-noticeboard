@@ -16,6 +16,13 @@ const getStudentRecord = ()=>{
                 message.innerHTML = record.message[i];
                 messageContainer.appendChild(message);
             }
+            if(record.message.length == 0){
+                var messageContainer = document.getElementById('messageContainer');
+                var message = document.createElement('p');
+
+                message.innerHTML = "No new Message";
+                messageContainer.appendChild(message);
+            }
         }
     }
 }
