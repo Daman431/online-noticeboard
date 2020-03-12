@@ -7,36 +7,39 @@ const mongodb = require('mongodb');
 require('./db/mongoose');
 const Student = require('./db/model/Student');
 const Admin = require('./db/model/Admin');
+var info = null;
 
 
-//template set
+//Template Set
 app.set('view engine','hbs');
 app.use(express.static(path.join(__dirname,'./public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-app.get('/index',(req,res)=>{
-    res.render("index");
-})
+//Post Requests
 
+//Login Request
 app.post('/login',(req,res)=>{
-    User.findOne({username:req.body.username},(error,result)=>{
-        if(result.password == req.body.password){
-            console.log(result)
-            res.send("FOUND!")
+    Student.findOne({username:req.body.username},(error,result)=>{
+        if(error){
+            return res.send('Database Error!');
         }
-        else{
-            res.send("Wrong pass!")
+        else if(result){
+            if(result.password == req.body.password){
+                info = result;
+                return res.redirect('student');
+            }
         }
+        res.send('Wrong username or Password');
     })
 })
 
-
+//Sign in Request
 app.post("/sign_in",(req,res)=>{
     console.log(req.body)
     if(req.body.userType == 'Student'){
-        const newStudent = new Student(req.body)
+        const newStudent = new Student(req.body);
         newStudent.save().then(()=>{
             res.redirect("student");
         });
@@ -48,10 +51,11 @@ app.post("/sign_in",(req,res)=>{
         });
     }
 })
+
+//Post Message
 app.post('/message',(req,res)=>{
     console.log(req.body)
     for(i=0;i<req.body.studentList.length;i++){
-        console.log(i)
         Student.findOneAndUpdate({username:req.body.studentList[i]},{$push:{message:req.body.message}},(error,result)=>{
             if(error){
                 return console.log(error);
@@ -62,21 +66,52 @@ app.post('/message',(req,res)=>{
     res.send('Updated!');
 })
 
+//GET Requests
+app.get('/index',(req,res)=>{
+    res.render("index");
+})
+
+
 app.get('/admin',(req,res)=>{
     res.render('admin');
 })
+
+
 app.get('/student',(req,res)=>{
-    res.render('student');
+    if(info){
+        return res.render('student',info);
+    }
+    res.send('Acces denied!')
 })
+
+
 app.get('/student_details',(req,res)=>{
-    var studentList = Student.find({},(error,result)=>{
+    Student.find({},(error,result)=>{
         if(error){
             console.log("error!");
             return res.send("Error in the database!");
         }
-        res.send(result);
+    res.send(result);
     });
 })
+
+app.get('/studentRecord',(req,res)=>{
+    Student.findOne({username:req.query.username},(error,result)=>{
+        if(error){
+            console.log('Unable to find Student!');
+            return res.send("Error in the database!");
+        }
+    res.send(result);
+    })
+})
+
+app.get('/logout',(req,res)=>{
+    info = null;
+    res.redirect('index')
+})
+
+
+//Hosted PORT
 app.listen('3000',()=>{
     console.log('App is running on port:3000')
 })

@@ -1,8 +1,20 @@
 <html>
     <head>
         <title>Student</title>
+        <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
-        <p>this is a Student page!</p>
+        <div class="container-fluid jumbotron">
+            <h1>Welcome<p id="username">{{username}}</p></h1>
+        </div>
+        <div class="container-fluid bg-success" id="messageContainer">
+        </div>
     </body>
+    <script src="js/student_response.js"></script>
 </html>
