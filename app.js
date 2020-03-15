@@ -8,7 +8,8 @@ require('./db/mongoose');
 const Student = require('./db/model/Student');
 const Admin = require('./db/model/Admin');
 const Public = require('./db/model/Public');
-var info = null;
+var studentInfo = null;
+var adminInfo = null;
 
 
 //Template Set
@@ -31,44 +32,59 @@ app.post('/login',(req,res)=>{
         }
         else if(result){
             if(result.password == req.body.password){
-                info = result;
+                studentInfo = result;
                 return res.redirect('student');
             }
         }
     });
 
-
     //Admin Table check
+
     Admin.findOne({username:req.body.username},(error,result)=>{
         if(error){
             return res.send('Database Error!');
         }
         else if(result){
             if(result.password == req.body.password){
-                info = result;
+                adminInfo = result;
                 return res.redirect('admin');
             }
         }
-        res.send('Wrong username or Password');
-    })
+        res.send("<h1>Wrong Password!</h1>")
+    });
+
 })
 
 //Sign in Request
 app.post("/sign_in",(req,res)=>{
-    console.log(req.body)
+
     if(req.body.userType == 'Student'){
-        const newStudent = new Student(req.body);
-        newStudent.save().then(()=>{
-            res.redirect("student");
-        });
+        Student.findOne({username:req.body.username},(error,result)=>{
+            if(result){
+                return res.send('Already Exist!');
+            }
+            const newStudent = new Student(req.body);
+            studentInfo = req.body;
+            newStudent.save().then(()=>{
+                res.redirect("student");
+            })
+        })
+        
     }
     else if(req.body.userType == 'Admin'){
-        const newAdmin = new Admin(req.body);
-        newAdmin.save().then(()=>{
-            res.redirect('admin');
-        });
+        Admin.findOne({},(error,result)=>{
+            if(result){
+                return res.send('Already Exist!');
+            }
+            const newAdmin = new Admin(req.body);
+            adminInfo = req.body;
+            newAdmin.save().then(()=>{
+                res.redirect('admin');
+            })
+        })
     }
 })
+
 
 //Post Message
 app.post('/message',(req,res)=>{
@@ -84,8 +100,15 @@ app.post('/message',(req,res)=>{
     res.send('Updated!');
 })
 
-//POST public message
 
+//POST public message
+app.post('/publicMessage',(req,res)=>{
+    console.log(req.body)
+    const newPublicMessage = new Public(req.body);
+    newPublicMessage.save().then(()=>{
+        res.send("Saved successfully!");
+    });
+})
 
 //GET Requests
 app.get('/index',(req,res)=>{
@@ -93,38 +116,43 @@ app.get('/index',(req,res)=>{
 })
 
 
+//Render Admin Page
 app.get('/admin',(req,res)=>{
-    res.render('admin');
-})
-
-
-app.get('/student',(req,res)=>{
-    if(info){
-        return res.render('student',info);
+    if(adminInfo){
+        return res.render('admin',adminInfo);
     }
     res.send('Acces denied!')
 })
 
+//Render Student Page
+app.get('/student',(req,res)=>{
+    if(studentInfo){
+        return res.render('student',studentInfo);
+    }
+    res.send('Acces denied!')
+})
 
-app.get('/student_details',(req,res)=>{
+//Send Student List
+app.get('/studentList',(req,res)=>{
     Student.find({},(error,result)=>{
         if(error){
-            console.log("error!");
             return res.send("Error in the database!");
         }
     res.send(result);
     });
 })
 
+//Send Student Details
 app.get('/studentRecord',(req,res)=>{
     Student.findOne({username:req.query.username},(error,result)=>{
         if(error){
-            console.log('Unable to find Student!');
             return res.send("Error in the database!");
         }
     res.send(result);
     })
 })
+
+//Display Public Message
 app.get('/publicMessage',(req,res)=>{
     Public.find({},(error,result)=>{
         if(error){
@@ -134,8 +162,10 @@ app.get('/publicMessage',(req,res)=>{
     })
 })
 
+//Logout
 app.get('/logout',(req,res)=>{
-    info = null;
+    studentInfo = null;
+    adminInfo = null;
     res.redirect('index')
 })
 

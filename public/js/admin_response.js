@@ -3,7 +3,7 @@
 //Get Student Details from the Database//
 const getStudentDetails = ()=>{
     var xhr = new XMLHttpRequest();
-	xhr.open("GET","/student_details");
+	xhr.open("GET","/studentList");
 	xhr.send();
 	xhr.onreadystatechange = function(){
 		if(this.readyState == 4 && this.status == 200){
@@ -28,7 +28,6 @@ const getStudentDetails = ()=>{
                     studentLabel.appendChild(studentName);
                     studentListDiv.appendChild(studentLabel);
             }
-
 		}
 	}
 }
@@ -70,10 +69,22 @@ const sendMessage = ()=>{
     var xhr = new XMLHttpRequest;
     xhr.open("POST",'/message');
     xhr.setRequestHeader("Content-type", "application/JSON");
-    var  messageObject = {
+    let  messageObject = {
         studentList: selectedStudentsArray,
         message:message
     }
-
+    xhr.send(JSON.stringify(messageObject));
+    var publicMessageCheck = document.getElementById('publicMessage');
+    if(publicMessageCheck.checked){
+        postPublicMessage(message)
+    }
+}
+const postPublicMessage = (message)=>{
+    var xhr = new XMLHttpRequest;
+    xhr.open("POST","/publicMessage");
+    xhr.setRequestHeader("Content-type","application/JSON")
+    let messageObject = {
+        message:message
+    }
     xhr.send(JSON.stringify(messageObject));
 }
